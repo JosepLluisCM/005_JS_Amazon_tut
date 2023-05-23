@@ -10,6 +10,7 @@
 
 let productsHTML = [];
 
+//iterate through the products array, generate the html code for each one
 products.forEach( (product) => {
   productsHTML += `
     <div class="product-container">
@@ -64,17 +65,19 @@ products.forEach( (product) => {
   `;
 });
 //DATA ATRIBUTES: ALWAYS START WITH: DATA- and in kebab case
+
+//Put the generated html on the page with innerHTML
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 
 //________________________CONTROLLER________________________//
 
-
+//querySelectorAll gets all items with this js-class, iterate them waiting for a click, then put them in the cart
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
     const productId = button.dataset.productId;
+    //check if the item is already there, and if true, add one to the quantitylet matchingItem;
     let matchingItem;
-
     cart.forEach( (item) => {
       if (productId === item.productId) {
         matchingItem = item;
@@ -83,12 +86,19 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     if (matchingItem) {
       matchingItem.quantity += 1;
     } else {
+      //if false, add the item to the cart
       cart.push({
         productId: productId,
         quantity: 1
       });
     }
-    //console.log(cart);
+    //we need to update the cart number in the header too, so iterate throught the cart to count all products
+    let cartQuantity = 0;
+    cart.forEach((item) => {
+      cartQuantity += item.quantity;
+    });
+    
+    //Update the cart quantity number in the header
+    document.querySelector('.js-cart-quantity').innerText = cartQuantity;
   });
-  
 });
