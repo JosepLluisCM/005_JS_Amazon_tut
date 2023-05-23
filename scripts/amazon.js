@@ -36,7 +36,7 @@ products.forEach( (product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-quantity-selector-${product.id}">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -76,6 +76,9 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
     const productId = button.dataset.productId;
+    const itemQuantity = document.querySelector(`.js-quantity-selector-${productId}`).value;
+    //console.log(document.querySelector(`.js-quantity-selector`));
+
     //check if the item is already there, and if true, add one to the quantitylet matchingItem;
     let matchingItem;
     cart.forEach( (item) => {
@@ -84,12 +87,12 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
       }
     });
     if (matchingItem) {
-      matchingItem.quantity += 1;
+      matchingItem.quantity += Number(itemQuantity);
     } else {
       //if false, add the item to the cart
       cart.push({
         productId: productId,
-        quantity: 1
+        quantity: Number(itemQuantity)
       });
     }
     //we need to update the cart number in the header too, so iterate throught the cart to count all products
@@ -97,7 +100,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     cart.forEach((item) => {
       cartQuantity += item.quantity;
     });
-    
+    console.log(cart);
     //Update the cart quantity number in the header
     document.querySelector('.js-cart-quantity').innerText = cartQuantity;
   });
