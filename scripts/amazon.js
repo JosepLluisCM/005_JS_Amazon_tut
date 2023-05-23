@@ -52,7 +52,7 @@ products.forEach( (product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -75,7 +75,31 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 //querySelectorAll gets all items with this js-class, iterate them waiting for a click, then put them in the cart
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
+    let addedMessageTimeoutId;
     const productId = button.dataset.productId;
+
+    //Add a class to make the added tick appear on screen, set a lopp for the timeOut ID
+    const addedMessage = document.querySelector(
+      `.js-added-to-cart-${productId}`
+    );
+
+    addedMessage.classList.add('added-to-cart-appear');
+    
+      // Check if a previous timeoutId exists. If it does,
+      // we will stop it.
+      if (addedMessageTimeoutId) {
+        clearTimeout(addedMessageTimeoutId);
+      }
+
+      const timeoutId = setTimeout(() => {
+        addedMessage.classList.remove('added-to-cart-appear');
+      }, 2000);
+      
+
+      // Save the timeoutId so we can stop it later.
+      addedMessageTimeoutId = timeoutId;
+    
+
     const itemQuantity = document.querySelector(`.js-quantity-selector-${productId}`).value;
     //console.log(document.querySelector(`.js-quantity-selector`));
 
